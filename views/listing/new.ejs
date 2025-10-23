@@ -1,0 +1,124 @@
+<% layout("layout/boilerplate") -%>
+
+    <div class="row"></div>
+    <div class="col-8 offset-2">
+        <br>
+        <h3>Create new listing:</h3>
+        <br>
+
+        <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+            
+            <div class="mb-3"><label class="form-label" for="title">Title</label>
+                <input type="text" id="title" name="listing[title]" placeholder="Enter a cachy title"
+                    class="form-control" required>
+                <div class="valid-feedback">Title Looks good!</div>
+                <div class="invalid-feedback">Please provide a valid title</div>
+            </div>
+            <div class="mb-3"><label class="form-label" for="description">Description</label>
+                <textarea id="description" name="listing[description]" rows="4"
+                    placeholder="Briefly describe your listing" class="form-control" required></textarea>
+                <div class="valid-feedback">Attentive description</div>
+                <div class="invalid-feedback">
+                    Give description
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="category">Category</label>
+                <select id="category" name="listing[category]" class="form-control" required>
+                    <option value="" disabled selected>Select a category</option>
+                    <option value="Trending">Trending</option>
+                    <option value="Room">Room</option>
+                    <option value="Single Seater">Single Seater</option>
+                    <option value="Double Seater">Double Seater</option>
+                    <option value="Triple Sharing">Triple Sharing</option>
+                    <option value="Dormitory">Dormitory</option>
+                    <option value="Studio Apartment">Studio Apartment</option>
+                    <option value="Flat/Apartment">Flat/Apartment</option>
+                    <option value="Girls Hostel">Girls Hostel</option>
+                    <option value="Boys Hostel">Boys Hostel</option>
+                    <option value="Co-Living Space">Co-Living Space</option>
+                    <option value="Economy">Economy</option>
+                    <option value="Premium">Premium</option>
+                    <option value="Room with Mess">Room with Mess</option>
+                </select>
+
+                <div id="mess-options" style="display:none; margin-top:10px;">
+                    <label for="messAvailable">Mess Type</label>
+                    <select name="listing[messAvailable]" id="messAvailable" class="form-control">
+                        <option value="Vegetarian">Vegetarian</option>
+                        <option value="Non-Vegetarian">Non-Vegetarian</option>
+                        <option value="Veg & Non-Veg">Veg & Non-Veg</option>
+                    </select>
+                </div>
+
+                <div id="menu-photo" style="display:none; margin-top:10px;">
+                    <label for="menuImage">Upload Mess Menu</label>
+                    <input type="file" name="listing[menuImage]" id="menuImage" class="form-control" accept="image/*">
+                </div>
+
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Please select a category</div>
+            </div>
+
+            <div class="mb-3"><label class="form-label" for="image">Upload Image</label>
+                <input type="file" id="image" name="listing[image]" class="form-control">
+            </div>
+
+            <div class="mb-3"><label class="form-label" for="price">Price</label>
+                <textarea type="number" id="price" name="listing[price]" placeholder="Set a price" class="form-control"
+                    required></textarea>
+                <div class="valid-feedback">Looks genuine</div>
+                <div class="invalid-feedback">
+                    Enter valid price
+                </div>
+            </div>
+
+            <div class="mb-3"><label class="form-label" for="phone">Phone</label>
+                <input type="tel" id="phone" name="listing[phone]" placeholder="Enter phone number" class="form-control"
+                    pattern="[0-9]{10}" required>
+                <div class="valid-feedback">Valid phone number</div>
+                <div class="invalid-feedback">Enter a 10-digit phone number</div>
+            </div>
+            
+            <div class="row">
+                <div class="mb-3 col-md-4"><label class="form-label" for="location">Location</label>
+                    <input type="text" id="location" name="listing[location]" placeholder="City or Area"
+                        class="form-control" required>
+                    <div class="valid-feedback">Looks nice city</div>
+                    <div class="invalid-feedback">
+                        Enter city name
+                    </div>
+                </div>
+                <div class="mb-3 col-md-8"><label class="form-label" for="country">Country</label>
+                    <input type="text" id="country" name="listing[country]" placeholder="Country Name (e.g., India)"
+                        class="form-control" required>
+                    <div class="valid-feedback">Looks great country</div>
+                    <div class="invalid-feedback">
+                        Please provide country name
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="mb-3"><button class="btn submit-btn">Submit</button></div>
+        </form>
+        <br>
+    </div>
+    </div>
+
+    <script>
+        document.getElementById("category").addEventListener("change", function () {
+            let messOptions = document.getElementById("mess-options");
+            let messSelect = document.getElementById("messAvailable");
+            let menuPhoto = document.getElementById("menu-photo");
+
+            if (this.value === "Room with Mess") {
+                messOptions.style.display = "block";
+                menuPhoto.style.display = "block";
+                messSelect.value = "Vegetarian";
+            } else {
+                messOptions.style.display = "none";
+                menuPhoto.style.display = "none";
+                messSelect.value = "None";
+            }
+        });
+    </script>

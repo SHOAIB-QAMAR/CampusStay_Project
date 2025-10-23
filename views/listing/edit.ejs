@@ -1,0 +1,128 @@
+<% layout("layout/boilerplate") -%>
+
+    <body>
+
+        <div class="row mt-3 mb-5">
+            <div class="col-8 offset-2">
+                <h3>Edit list:</h3>
+                <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate
+                    class="needs-validation" enctype="multipart/form-data">
+
+                    <div class="mb-3">
+                        <label class="form-label" for="title">Title:</label>
+                        <textarea class="form-control" id="title" name="listing[title]" rows="2" cols="50"
+                            required><%= listing.title %></textarea>
+                        <div class="valid-feedback">Title Looks good!</div>
+                        <div class="invalid-feedback">Please provide a valid title</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="description">Description:</label>
+                        <textarea class="form-control" id="description" name="listing[description]" rows="2" cols="50"
+                            required><%= listing.description %></textarea>
+                        <div class="valid-feedback">Attentive description</div>
+                        <div class="invalid-feedback">
+                            Give description
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        Original Listing Image:<br>
+                        <img src="<%= originalImageUrl %>"
+                            style="max-width: 50%; max-height: 160px; border-radius: 10px;">
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label" for="image">Image URL:</label>
+                        <input type="file" class="form-control" id="image" name="listing[image]">
+                    </div>
+
+                    <input type="hidden" name="listing[category]" value="<%= listing.category %>">
+
+                    <% if (listing.category==="Room with Mess" ) { %>
+                        <hr>
+                        <h5>Mess Details</h5>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="messAvailable">Mess Type:</label>
+                            <select class="form-control" id="messAvailable" name="listing[messAvailable]">
+                                <option value="Vegetarian" <%=listing.messAvailable==="Vegetarian" ? "selected" : "" %>
+                                    >Vegetarian</option>
+                                <option value="Non-Vegetarian" <%=listing.messAvailable==="Non-Vegetarian" ? "selected"
+                                    : "" %>
+                                    >Non-Vegetarian</option>
+                                <option value="Veg & Non-Veg" <%=listing.messAvailable==="Veg & Non-Veg" ? "selected"
+                                    : "" %>>Veg & Non-Veg
+                                </option>
+                                <option value="None" <%=listing.messAvailable==="None" ? "selected" : "" %>>None
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            Mess Image:<br>
+                            <% if (listing.menuImage && listing.menuImage.url) { %>
+                                <img src="<%= listing.menuImage.url %>"
+                                    style="max-width: 50%; max-height: 160px; border-radius: 10px;">
+                                <% } %>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="menuImage">Change Mess Image:</label>
+                            <input type="file" class="form-control" id="menuImage" name="listing[menuImage]">
+                        </div>
+                        <% } %>
+
+
+                            <div class="mb-3">
+                                <label class="form-label" for="price">Price (in USD):</label>
+                                <textarea class="form-control" id="price" name="listing[price]" rows="2" cols="50"
+                                    required><%= listing.price %></textarea>
+                                <div class="valid-feedback">Looks genuine</div>
+                                <div class="invalid-feedback">
+                                    Enter valid price
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="phone">Phone Number:</label>
+                                <input type="tel" class="form-control" id="phone" name="listing[phone]" value="<%= listing.phone %>" required
+                                    pattern="^\+?\d{10}$" title="Enter a valid phone number (10–15 digits, optional +)">
+                                <div class="valid-feedback">Looks like a valid phone!</div>
+                                <div class="invalid-feedback">
+                                    Please enter a valid phone number (10 digits).
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="mb- col-md-4">
+                                    <label class="form-label" for="location">Location:</label>
+                                    <textarea class="form-control" id="location" name="listing[location]" rows="2"
+                                        cols="50" required><%= listing.location %></textarea>
+                                    <div class="valid-feedback">Looks nice location</div>
+                                    <div class="invalid-feedback">
+                                        Enter location name
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-8">
+                                    <label class="form-label" for="country">Country:</label>
+                                    <textarea class="form-control" id="country" name="listing[country]" rows="2"
+                                        cols="50" required><%= listing.country %></textarea>
+                                    <div class="valid-feedback">Looks great country</div>
+                                    <div class="invalid-feedback">
+                                        Please provide country name
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <br>
+                            <button class="btn edit-btn mb-5">Update</button>
+                </form>
+            </div>
+        </div>
+    </body>

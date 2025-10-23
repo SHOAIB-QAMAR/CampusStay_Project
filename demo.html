@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Range Filter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .price-filter-container {
+            border: 1px solid #dee2e6;
+            background: #f8f9fa !important;
+            border-radius: 8px;
+        }
+
+        .price-filter-container h5 {
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .price-slider-container {
+            padding: 20px 15px 10px;
+        }
+
+        .slider-track {
+            height: 5px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            position: relative;
+            margin: 25px 0 35px;
+        }
+
+        .slider-range {
+            position: absolute;
+            height: 100%;
+            background-color: #0d6efd;
+            border-radius: 5px;
+            left: 0%;
+            right: 0%;
+        }
+
+        .slider-thumb {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #fff;
+            border: 2px solid #0d6efd;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s;
+        }
+
+        .slider-thumb:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-thumb.min {
+            left: 0%;
+        }
+
+        .slider-thumb.max {
+            left: 100%;
+        }
+
+        .price-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .price-input-group {
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+        }
+
+        .price-input-group label {
+            font-size: 0.875rem;
+            margin-bottom: 5px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .price-input {
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 8px 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .price-display {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #495057;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-go {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .btn-reset {
+            background-color: transparent;
+            color: #6c757d;
+            border: 1px solid #6c757d;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .active-filter {
+            background-color: #e7f1ff;
+            border-radius: 4px;
+            padding: 8px 12px;
+            margin-top: 10px;
+            font-size: 0.875rem;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: -15px;
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="price-filter-container mt-3 mb-3 p-3 bg-light rounded">
+            <h5 class="mb-3">Filter by Price</h5>
+            <form id="priceFilterForm" action="/listings" method="GET" class="row g-3 align-items-center">
+                <!-- Preserve category filter if present -->
+                <input type="hidden" id="categoryFilter" name="category" value="">
+
+                <!-- Slider Container -->
+                <div class="price-slider-container">
+                    <div class="slider-track">
+                        <div class="slider-range" id="sliderRange"></div>
+                        <div class="slider-thumb min" id="minThumb"></div>
+                        <div class="slider-thumb max" id="maxThumb"></div>
+                    </div>
+
+                    <div class="slider-labels">
+                        <span>¥0</span>
+                        <span>¥350</span>
+                        <span>¥700</span>
+                    </div>
+
+                    <div class="price-inputs">
+                        <div class="price-input-group">
+                            <label for="minPrice">Min Price (¥)</label>
+                            <input type="number" class="form-control price-input" id="minPrice" name="minPrice"
+                                placeholder="96" min="0" max="700" value="96">
+                        </div>
+                        <div class="price-input-group">
+                            <label for="maxPrice">Max Price (¥)</label>
+                            <input type="number" class="form-control price-input" id="maxPrice" name="maxPrice"
+                                placeholder="700" min="96" max="700" value="700">
+                        </div>
+                    </div>
+
+                    <div class="price-display">
+                        Selected range: <span id="selectedRange">¥96 - ¥700</span>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-primary flex-grow-1">
+                        <i class="fa-solid fa-play"></i> Go
+                    </button>
+
+                    <button type="button" id="resetPriceRange" class="btn btn-outline-secondary">
+                        Reset price range
+                    </button>
+                </div>
+            </form>
+
+            <!-- Show active price filter -->
+            <div id="activeFilterDisplay" class="mt-2" style="display: none;">
+                <small class="text-muted">
+                    Price range: ¥<span id="activeMinPrice">0</span> - ¥<span id="activeMaxPrice">Any</span>
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize the slider
+            const minPriceInput = document.getElementById('minPrice');
+            const maxPriceInput = document.getElementById('maxPrice');
+            const minThumb = document.getElementById('minThumb');
+            const maxThumb = document.getElementById('maxThumb');
+            const sliderRange = document.getElementById('sliderRange');
+            const selectedRange = document.getElementById('selectedRange');
+            const activeFilterDisplay = document.getElementById('activeFilterDisplay');
+            const activeMinPrice = document.getElementById('activeMinPrice');
+            const activeMaxPrice = document.getElementById('activeMaxPrice');
+            const resetButton = document.getElementById('resetPriceRange');
+            const priceFilterForm = document.getElementById('priceFilterForm');
+
+            const minValue = 0;
+            const maxValue = 700;
+            let minPrice = 96;
+            let maxPrice = 700;
+
+            // Initialize slider position
+            updateSlider();
+
+            // Set up event listeners for input fields
+            minPriceInput.addEventListener('input', function () {
+                minPrice = parseInt(this.value) || minValue;
+                if (minPrice > maxPrice) {
+                    minPrice = maxPrice;
+                    this.value = minPrice;
+                }
+                updateSlider();
+            });
+
+            maxPriceInput.addEventListener('input', function () {
+                maxPrice = parseInt(this.value) || maxValue;
+                if (maxPrice < minPrice) {
+                    maxPrice = minPrice;
+                    this.value = maxPrice;
+                }
+                updateSlider();
+            });
+
+            // Set up event listeners for slider thumbs
+            let isDragging = false;
+            let activeThumb = null;
+
+            minThumb.addEventListener('mousedown', startDrag);
+            maxThumb.addEventListener('mousedown', startDrag);
+
+            function startDrag(e) {
+                isDragging = true;
+                activeThumb = e.target;
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('mouseup', stopDrag);
+            }
+
+            function onDrag(e) {
+                if (!isDragging) return;
+
+                const sliderTrack = document.querySelector('.slider-track');
+                const rect = sliderTrack.getBoundingClientRect();
+                let percentage = (e.clientX - rect.left) / rect.width;
+                percentage = Math.max(0, Math.min(1, percentage));
+
+                const value = Math.round(minValue + percentage * (maxValue - minValue));
+
+                if (activeThumb === minThumb) {
+                    minPrice = Math.min(value, maxPrice - 1);
+                    minPriceInput.value = minPrice;
+                } else {
+                    maxPrice = Math.max(value, minPrice + 1);
+                    maxPriceInput.value = maxPrice;
+                }
+
+                updateSlider();
+            }
+
+            function stopDrag() {
+                isDragging = false;
+                activeThumb = null;
+                document.removeEventListener('mousemove', onDrag);
+                document.removeEventListener('mouseup', stopDrag);
+            }
+
+            // Touch events for mobile
+            minThumb.addEventListener('touchstart', startDragTouch);
+            maxThumb.addEventListener('touchstart', startDragTouch);
+
+            function startDragTouch(e) {
+                isDragging = true;
+                activeThumb = e.target;
+                document.addEventListener('touchmove', onDragTouch);
+                document.addEventListener('touchend', stopDragTouch);
+            }
+
+            function onDragTouch(e) {
+                if (!isDragging) return;
+
+                const sliderTrack = document.querySelector('.slider-track');
+                const rect = sliderTrack.getBoundingClientRect();
+                let percentage = (e.touches[0].clientX - rect.left) / rect.width;
+                percentage = Math.max(0, Math.min(1, percentage));
+
+                const value = Math.round(minValue + percentage * (maxValue - minValue));
+
+                if (activeThumb === minThumb) {
+                    minPrice = Math.min(value, maxPrice - 1);
+                    minPriceInput.value = minPrice;
+                } else {
+                    maxPrice = Math.max(value, minPrice + 1);
+                    maxPriceInput.value = maxPrice;
+                }
+
+                updateSlider();
+            }
+
+            function stopDragTouch() {
+                isDragging = false;
+                activeThumb = null;
+                document.removeEventListener('touchmove', onDragTouch);
+                document.removeEventListener('touchend', stopDragTouch);
+            }
+
+            // Update slider visuals
+            function updateSlider() {
+                const minPercentage = ((minPrice - minValue) / (maxValue - minValue)) * 100;
+                const maxPercentage = ((maxPrice - minValue) / (maxValue - minValue)) * 100;
+
+                minThumb.style.left = `${minPercentage}%`;
+                maxThumb.style.left = `${maxPercentage}%`;
+                sliderRange.style.left = `${minPercentage}%`;
+                sliderRange.style.right = `${100 - maxPercentage}%`;
+
+                selectedRange.textContent = `¥${minPrice} - ¥${maxPrice}`;
+            }
+
+            // Reset functionality
+            resetButton.addEventListener('click', function () {
+                minPrice = 96;
+                maxPrice = 700;
+                minPriceInput.value = minPrice;
+                maxPriceInput.value = maxPrice;
+                updateSlider();
+                activeFilterDisplay.style.display = 'none';
+            });
+
+            // Form submission - show active filter
+            priceFilterForm.addEventListener('submit', function () {
+                activeMinPrice.textContent = minPrice;
+                activeMaxPrice.textContent = maxPrice;
+                activeFilterDisplay.style.display = 'block';
+            });
+
+            // Simulate form submission to show active filter if values are set
+            if (minPrice > minValue || maxPrice < maxValue) {
+                activeMinPrice.textContent = minPrice;
+                activeMaxPrice.textContent = maxPrice;
+                activeFilterDisplay.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

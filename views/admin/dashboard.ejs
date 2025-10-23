@@ -1,0 +1,99 @@
+<% layout("layout/boilerplate") -%>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="h3 mb-0">
+                            <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
+                        </h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <h4 class="alert-heading">Welcome, <%= currentUser.username %>! 👑</h4>
+                            <p class="mb-0">You have successfully logged in as an administrator.</p>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="card text-white bg-info">
+                                    <div class="card-body text-center">
+                                        <a href="/admin/listings" class="text-white text-decoration-none">
+                                            <h3>
+                                                <%= listings.length %>
+                                            </h3>
+                                        </a>
+                                        <p class="mb-0">Total Listings</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-white bg-success">
+                                    <div class="card-body text-center">
+                                        <a href="/admin/users" class="text-white text-decoration-none">
+                                            <h3>
+                                                <%= users.length %>
+                                            </h3>
+                                        </a>
+                                        <p class="mb-0">Total Users</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-white bg-warning">
+                                    <div class="card-body text-center">
+                                        <a href="/admin/reviews" class="text-white text-decoration-none">
+                                            <h3>
+                                                <%= reviews.length %>
+                                            </h3>
+                                        </a>
+                                        <p class="mb-0">Total Reviews</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Quick Actions</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <a href="/admin/listings" class="btn btn-outline-primary">
+                                                <i class="fas fa-home me-2"></i>Manage Listings
+                                            </a>
+                                            <a href="/admin/users" class="btn btn-outline-success">
+                                                <i class="fas fa-users me-2"></i>Manage Users
+                                            </a>
+                                            <a href="/admin/reviews" class="btn btn-outline-warning">
+                                                <i class="fas fa-comments me-2"></i>Manage Reviews
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Recent Activity</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-muted">Admin panel is ready!</p>
+                                        <ul class="list-unstyled">
+                                            <li>✅ User authentication working</li>
+                                            <li>✅ Role-based access control</li>
+                                            <li>✅ Admin dashboard accessible</li>
+                                            <li>🚧 More features coming soon...</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

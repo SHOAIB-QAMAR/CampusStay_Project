@@ -1,0 +1,24 @@
+<% layout("layout/boilerplate") -%>
+
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-12 text-center">
+                <h3 class="mb-4">
+                    <%= listing.title %> - Mess Menu
+                </h3>
+
+                <% if (listing.menuImage && listing.menuImage.url) { %>
+                    <div class="menu-image-container">
+                        <img src="<%= listing.menuImage.url %>" class="img-fluid" alt="Menu for <%= listing.title %>"
+                            style="max-width: 30rem; height: auto;">
+                    </div>
+                    <% } else { %>
+                        <p class="text-muted">No menu uploaded for this listing.</p>
+                        <% } %>
+
+                            <div class="mt-4 mb-4">
+                                <a href="/listings/<%= listing._id %>" class="btn edit-btn">Back to Listing</a>
+                            </div>
+            </div>
+        </div>
+    </div>
