@@ -35,13 +35,30 @@ router.delete("/listings/:id", isAdmin, wrapAsync(async (req, res) => {
 }));
 
 // Admin Users Management
+// router.get("/users", isAdmin, wrapAsync(async (req, res) => {
+//     const users = await User.find({});
+//     res.render("admin/users", {
+//         users,
+//         currentUser: req.user // <--- This line fixes the error
+//     });
+// }));
 router.get("/users", isAdmin, wrapAsync(async (req, res) => {
     const users = await User.find({});
+
+    // Separate users by role
+    const regularUsers = users.filter(user => user.role === 'user');
+    const landlords = users.filter(user => user.role === 'landlord');
+    const admins = users.filter(user => user.role === 'admin');
+
     res.render("admin/users", {
-        users,
-        currentUser: req.user // <--- This line fixes the error
+        regularUsers,
+        landlords,
+        admins,
+        users, // Keep original array for compatibility
+        currentUser: req.user
     });
 }));
+
 
 // Admin Reviews Management
 router.get("/reviews", isAdmin, wrapAsync(async (req, res) => {
