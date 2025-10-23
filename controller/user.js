@@ -1,30 +1,5 @@
 const User = require("../models/user");
 
-// module.exports.renderSignupForm = (req, res) => {
-//     res.render("users/signup.ejs");
-// };
-
-// module.exports.signup = async (req, res) => {
-//     try {
-//         let { username, email, password } = req.body;
-//         const newUser = new User({ email, username });
-//         const registeredUser = await User.register(newUser, password);
-//         console.log(registeredUser);
-
-//         req.login(registeredUser, function (err) {
-//             if (err) {
-//                 return next(err);
-//             }
-//             req.flash("success", "Welcome to Wanderlust!");
-//             res.redirect("/listings");
-//         });
-
-//     } catch (e) {
-//         req.flash("error", e.message);
-//         res.redirect("/signup");
-//     }
-// };
-
 module.exports.renderSignupForm = async (req, res) => {
     try {
         // Check if admin already exists
@@ -73,36 +48,56 @@ module.exports.signup = async (req, res, next) => {
     }
 };
 
+module.exports.becomeHost = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        // Find the current user
+        const user = await User.findById(userId);
+
+        if (!user) {
+            req.flash("error", "User not found!");
+            return res.redirect("/listings");
+        }
+
+        // Check if user is already a landlord
+        if (user.role === 'landlord') {
+            req.flash("info", "You are already a host!");
+            return res.redirect("/listings/new");
+        }
+
+        // Update user role to landlord
+        user.role = 'landlord';
+        await user.save();
+
+        console.log(`User ${user.username} role updated to landlord`);
+
+        req.flash("success", "🎉 Congratulations! You are now a host. You can now create listings.");
+        res.redirect("/listings/new");
+
+    } catch (error) {
+        console.error("Error updating user role:", error);
+        req.flash("error", "Something went wrong. Please try again.");
+        res.redirect("/listings");
+    }
+};
+
 module.exports.renderLoginForm = (req, res) => {
     res.render("users/login.ejs");
 };
 
-// module.exports.login = async (req, res) => {
-//     req.flash("success", "Welcome back to Wanderlust!");
-//     let redirectUrl = res.locals.redirectUrl || "/listings";
-//     res.redirect(redirectUrl);
-// };
-
 module.exports.login = async (req, res, next) => {
-    const { role } = req.body;
 
-    console.log("Login attempt → form role:", role, " | user role:", req.user.role);
-
-    if (role.toLowerCase() !== req.user.role.toLowerCase()) {
-        req.logout(err => { if (err) return next(err); });
-        req.flash("error", "Role mismatch! Please select the correct role.");
-        return res.redirect("/login");
-    }
+    console.log("Login successful | user role:", req.user.role);
 
     req.flash("success", `Welcome back, ${req.user.username}!`);
+
     if (req.user.role === "admin") {
-        return res.send("/admin/dashboard");
+        return res.redirect("/admin/dashboard");
     } else {
         return res.redirect("/listings");
     }
 };
-
-
 
 module.exports.logout = (req, res, next) => {
     req.logout((err) => {
