@@ -4,7 +4,7 @@ module.exports.listingSchema = Joi.object({
     listing: Joi.object({
         title: Joi.string().required(),
         description: Joi.string().required(),
-        category: Joi.string().valid("Trending", "Room","Single Seater", "Double Seater", "Triple Sharing", "Dormitory", "Studio Apartment", "Flat/Apartment", "Girls Hostel", "Boys Hostel", "Co-Living Space", "Economy", "Premium", "Room with Mess").required(),
+        category: Joi.string().valid("Trending", "Room","Single Seater", "Double Seater", "Dormitory", "Flat/Apartment", "Girls Hostel", "Boys Hostel", "Co-Living Space", "Economy", "Premium", "Room with Mess").required(),
         messAvailable: Joi.string().valid("Vegetarian", "Non-Vegetarian", "Veg & Non-Veg", "None").default("None"),
         image: Joi.object({
             url: Joi.string().allow("", null),
