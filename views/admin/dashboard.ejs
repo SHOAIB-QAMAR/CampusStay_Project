@@ -16,7 +16,7 @@
                         </div>
 
                         <div class="row mb-4">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="card text-white bg-info">
                                     <div class="card-body text-center">
                                         <a href="/admin/listings" class="text-white text-decoration-none">
@@ -28,7 +28,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="card text-white bg-success">
                                     <div class="card-body text-center">
                                         <a href="/admin/users" class="text-white text-decoration-none">
@@ -40,15 +40,27 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="card text-white bg-warning">
                                     <div class="card-body text-center">
-                                        <a href="/admin/reviews" class="text-white text-decoration-none">
+                                        <a href="/admin/users" class="text-white text-decoration-none">
                                             <h3>
-                                                <%= reviews.length %>
+                                                <%= users.filter(u=> u.role === 'user').length %>
                                             </h3>
                                         </a>
-                                        <p class="mb-0">Total Reviews</p>
+                                        <p class="mb-0">Regular Users</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-danger">
+                                    <div class="card-body text-center">
+                                        <a href="/admin/users" class="text-white text-decoration-none">
+                                            <h3>
+                                                <%= users.filter(u=> u.role === 'landlord').length %>
+                                            </h3>
+                                        </a>
+                                        <p class="mb-0">Landlords</p>
                                     </div>
                                 </div>
                             </div>
@@ -78,16 +90,32 @@
                             <div class="col-md-6 mb-3">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="mb-0">Recent Activity</h5>
+                                        <h5 class="mb-0">User Statistics</h5>
                                     </div>
                                     <div class="card-body">
-                                        <p class="text-muted">Admin panel is ready!</p>
-                                        <ul class="list-unstyled">
-                                            <li>✅ User authentication working</li>
-                                            <li>✅ Role-based access control</li>
-                                            <li>✅ Admin dashboard accessible</li>
-                                            <li>🚧 More features coming soon...</li>
-                                        </ul>
+                                        <div class="row text-center">
+                                            <div class="col-6">
+                                                <h4 class="text-success">
+                                                    <%= users.filter(u=> u.role === 'user').length %>
+                                                </h4>
+                                                <small class="text-muted">Regular Users</small>
+                                            </div>
+                                            <div class="col-6">
+                                                <h4 class="text-danger">
+                                                    <%= users.filter(u=> u.role === 'landlord').length %>
+                                                </h4>
+                                                <small class="text-muted">Landlords</small>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row text-center">
+                                            <div class="col-12">
+                                                <h4 class="text-warning">
+                                                    <%= users.filter(u=> u.role === 'admin').length %>
+                                                </h4>
+                                                <small class="text-muted">Administrators</small>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
