@@ -5,7 +5,7 @@ const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports.index = async (req, res) => {
-    const { category, minPrice, maxPrice } = req.query;
+    const { category, minPrice, maxPrice, myListings } = req.query;
     let query = {};
 
     // Category filter
@@ -24,14 +24,20 @@ module.exports.index = async (req, res) => {
         }
     }
 
+    // My Listings filter (only for authenticated landlords)
+    if (myListings === 'true' && req.isAuthenticated() && req.user.role === 'landlord') {
+        query.owner = req.user._id;
+    }
+
     // Always sort by price in ascending order
-    const allListings = await Listing.find(query).sort({ price: 1 });
+    const allListings = await Listing.find(query).populate("owner").sort({ price: 1 });
 
     res.render("listing/index.ejs", {
         allListings,
         selectedCategory: category,
         selectedMinPrice: minPrice || '',
-        selectedMaxPrice: maxPrice || ''
+        selectedMaxPrice: maxPrice || '',
+        showMyListings: myListings === 'true'
     });
 };
 
@@ -156,10 +162,14 @@ module.exports.searchListings = async (req, res) => {
             { location: { $regex: q, $options: 'i' } },
             { country: { $regex: q, $options: 'i' } }
         ]
-    });
+    }).populate("owner");
+
     if (allListings.length === 0) {
         req.flash("error", "Destination you requested for does not exist!");
         res.redirect("/listings");
     }
-    res.render("listing/index.ejs", { allListings });
+    res.render("listing/index.ejs", {
+        allListings,
+        searchQuery: q
+    });
 };
