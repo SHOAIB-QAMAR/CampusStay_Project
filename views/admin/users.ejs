@@ -10,65 +10,214 @@
             </a>
         </div>
 
-        <% if (users.length> 0) { %>
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">All Users (<%= users.length %>)</h5>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% users.forEach(user=> { %>
-                                    <tr>
-                                        <td>
-                                            <strong>
-                                                <%= user.username %>
-                                            </strong>
-                                        </td>
-                                        <td>
-                                            <%= user.email %>
-                                        </td>
-                                        <td>
-                                            <span
-                                                class="badge <%= user.role === 'admin' ? 'bg-warning' : 'bg-primary' %>">
-                                                <%= user.role %>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <% if (currentUser && currentUser._id.equals(user._id)) { %>
-                                                    <button class="btn btn-outline-danger disabled" type="button" title="Cannot delete your own admin account">
-                                                        <i class="fas fa-trash"></i> Delete
-                                                    </button>
-                                                    <% } else { %>
-                                                        <form action="/admin/users/<%= user._id %>?_method=DELETE" method="POST" class="d-inline">
-                                                            <button class="btn btn-outline-danger" type="submit" title="Delete User"
-                                                                onclick="return confirm('WARNING: This will permanently delete <%= user.username %> and all associated data. Are you sure?');">
-                                                                <i class="fas fa-trash"></i> Delete
-                                                            </button>
-                                                        </form>
-                                                        <% } %>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <% }); %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <!-- Regular Users Section -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-user me-2"></i>Regular Users
+                </h5>
+                <span class="badge bg-light text-dark">
+                    <%= users.filter(u=> u.role === 'user').length %> users
+                </span>
             </div>
-            <% } else { %>
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-info-circle me-2"></i>No users found
-                </div>
-                <% } %>
+            <div class="card-body p-0">
+                <% const regularUsers=users.filter(u=> u.role === 'user') %>
+                    <% if (regularUsers.length> 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-info">
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% regularUsers.forEach(user=> { %>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <%= user.username %>
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                <%= user.email %>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info">
+                                                    <%= user.role %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <form action="/admin/users/<%= user._id %>?_method=DELETE"
+                                                        method="POST" class="d-inline">
+                                                        <button class="btn btn-outline-danger" type="submit"
+                                                            title="Delete User"
+                                                            onclick="return confirm('WARNING: This will permanently delete <%= user.username %>. Are you sure?');">
+                                                            <i class="fas fa-trash"></i> Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } else { %>
+                            <div class="text-center p-4">
+                                <p class="text-muted mb-0">
+                                    <i class="fas fa-users fa-2x mb-3"></i><br>
+                                    No regular users found
+                                </p>
+                            </div>
+                            <% } %>
+            </div>
+        </div>
+
+        <!-- Landlords Section -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-home me-2"></i>Landlords
+                </h5>
+                <span class="badge bg-light text-dark">
+                    <%= users.filter(u=> u.role === 'landlord').length %> landlords
+                </span>
+            </div>
+            <div class="card-body p-0">
+                <% const landlords=users.filter(u=> u.role === 'landlord') %>
+                    <% if (landlords.length> 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% landlords.forEach(user=> { %>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <%= user.username %>
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                <%= user.email %>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success">
+                                                    <%= user.role %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <form action="/admin/users/<%= user._id %>?_method=DELETE"
+                                                        method="POST" class="d-inline">
+                                                        <button class="btn btn-outline-danger" type="submit"
+                                                            title="Delete Landlord"
+                                                            onclick="return confirm('WARNING: This will permanently delete landlord <%= user.username %> and all their listings. Are you sure?');">
+                                                            <i class="fas fa-trash"></i> Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } else { %>
+                            <div class="text-center p-4">
+                                <p class="text-muted mb-0">
+                                    <i class="fas fa-home fa-2x mb-3"></i><br>
+                                    No landlords found
+                                </p>
+                            </div>
+                            <% } %>
+            </div>
+        </div>
+
+        <!-- Admins Section -->
+        <div class="card">
+            <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-shield-alt me-2"></i>Administrators
+                </h5>
+                <span class="badge bg-light text-dark">
+                    <%= users.filter(u=> u.role === 'admin').length %> admins
+                </span>
+            </div>
+            <div class="card-body p-0">
+                <% const admins=users.filter(u=> u.role === 'admin') %>
+                    <% if (admins.length> 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-warning">
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% admins.forEach(user=> { %>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <%= user.username %>
+                                                </strong>
+                                                <% if (currentUser && currentUser._id.equals(user._id)) { %>
+                                                    <span class="badge bg-primary ms-1">You</span>
+                                                    <% } %>
+                                            </td>
+                                            <td>
+                                                <%= user.email %>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-warning">
+                                                    <%= user.role %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <% if (currentUser && currentUser._id.equals(user._id)) { %>
+                                                        <button class="btn btn-outline-danger disabled" type="button"
+                                                            title="Cannot delete your own admin account">
+                                                            <i class="fas fa-trash"></i> Delete
+                                                        </button>
+                                                        <% } else { %>
+                                                            <form action="/admin/users/<%= user._id %>?_method=DELETE"
+                                                                method="POST" class="d-inline">
+                                                                <button class="btn btn-outline-danger" type="submit"
+                                                                    title="Delete Admin"
+                                                                    onclick="return confirm('WARNING: This will permanently delete admin <%= user.username %>. Are you sure?');">
+                                                                    <i class="fas fa-trash"></i> Delete
+                                                                </button>
+                                                            </form>
+                                                            <% } %>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } else { %>
+                            <div class="text-center p-4">
+                                <p class="text-muted mb-0">
+                                    <i class="fas fa-shield-alt fa-2x mb-3"></i><br>
+                                    No administrators found
+                                </p>
+                            </div>
+                            <% } %>
+            </div>
+        </div>
     </div>
