@@ -202,13 +202,17 @@ body {
     padding: 0.5rem 3rem 0.5rem 3rem;
 }
 
-/* Price Range Filter */.price-filter-container {
+/* Price Range Filter */.price-filter-container, .landlord-filter-container {
     border: 1px solid #e0e0e0;
     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
     transition: all 0.3s ease;
 }
 
 .price-filter-container:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    border-color: #c5c5c5;
+}
+.landlord-filter-container:hover {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
     border-color: #c5c5c5;
 }
