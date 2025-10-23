@@ -12,7 +12,7 @@ const listingSchema = new Schema({
     description: String,
     category: {
         type: String,
-        enum: ["Trending", "Room","Single Seater", "Double Seater", "Triple Sharing", "Dormitory", "Studio Apartment", "Flat/Apartment", "Girls Hostel", "Boys Hostel", "Co-Living Space", "Economy", "Premium", "Room with Mess"],
+        enum: ["Trending", "Room","Single Seater", "Double Seater", "Dormitory", "Flat/Apartment", "Girls Hostel", "Boys Hostel", "Co-Living Space", "Economy", "Premium", "Room with Mess"],
         required:true
     },
     messAvailable: {
