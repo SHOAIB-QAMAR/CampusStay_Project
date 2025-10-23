@@ -28,7 +28,26 @@
                 </div>
 
                 <div class="nav-item d-flex flex-column flex-md-row align-items-center gap-2 order-3">
-                    <a class="nav-link text-nowrap" href="/listings/new">Airbnb your home</a>
+                    
+                    <% if(currUser){ %>
+                        <!-- When user is logged in -->
+                        <div class="nav-item d-flex align-items-center gap-3">
+                            <a class="nav-link text-nowrap p-0" href="/become-host">Become a Host</a>
+                            <span class="nav-link text-nowrap fw-bold p-0">
+                                <%= currUser.role==='landlord' ? 'Landlord' : 'User' %>: <%= currUser.username %>
+                            </span>
+                            <a class="nav-link text-nowrap p-0" href="/logout">Log out</a>
+                        </div>
+                        <% } else { %>
+                            <!-- When user is not logged in -->
+                            <div class="nav-item d-flex align-items-center gap-3">
+                                <a class="nav-link text-nowrap p-0" href="/become-host">Become a Host</a>
+                                <a class="nav-link text-nowrap p-0" href="/signup"><b>Sign up</b></a>
+                                <a class="nav-link text-nowrap p-0" href="/login"><b>Log in</b></a>
+                            </div>
+                            <% } %>
+
+                    <!-- <a class="nav-link text-nowrap" href="/become-host">Become a Host</a>
 
                     <% if(!currUser){ %>
                         <a class="nav-link text-nowrap" href="/signup"><b>Sign up</b></a>
@@ -37,7 +56,7 @@
 
                             <% if(currUser){ %>
                                 <a class="nav-link text-nowrap" href="/logout">Log out</a>
-                                <% } %>
+                                <% } %> -->
                 </div>
                 
             </div>
