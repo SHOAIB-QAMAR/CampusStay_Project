@@ -27,23 +27,12 @@
                 </a>
             </div>
             <div class="filter">
-                <a href="/listings?category=Triple%20Sharing" class="filter-link">
-                    <div><i class="fa-solid fa-people-group"></i></div>
-                    <p>Triple Sharing</p>
-                </a>
-            </div>
-            <div class="filter">
                 <a href="/listings?category=Dormitory" class="filter-link">
                     <div><i class="fa-solid fa-bed"></i></div>
                     <p>Dormitory</p>
                 </a>
             </div>
-            <div class="filter">
-                <a href="/listings?category=Studio%20Apartment" class="filter-link">
-                    <div><i class="fa-solid fa-house"></i></div>
-                    <p>Studio Apartment</p>
-                </a>
-            </div>
+
             <div class="filter">
                 <a href="/listings?category=Flat%2FApartment" class="filter-link">
                     <div><i class="fa-solid fa-building"></i></div>
@@ -86,12 +75,12 @@
                     <p>Room with Mess</p>
                 </a>
             </div>
-
         </div>
     </div>
 
+    <!-- Additional Filters Row -->
+    <div class="d-flex justify-content-center align-items-start gap-4 flex-wrap">
         <!-- Price Range Filter -->
-        <div class="d-flex justify-content-center align-items-start">
         <div class="price-filter-container mt-3 mb-3 p-3 bg-white rounded shadow-sm" style="width: 24rem;">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0 text-dark fw-bold">
@@ -101,13 +90,13 @@
                     ₹1400 - ₹8000
                 </span>
             </div>
-        
+
             <form action="/listings" method="GET" class="price-filter-form">
                 <!-- Preserve category filter if present -->
                 <% if (typeof selectedCategory !=='undefined' && selectedCategory) { %>
                     <input type="hidden" name="category" value="<%= selectedCategory %>">
                     <% } %>
-        
+
                         <!-- Price Slider Section -->
                         <div class="price-slider-section mb-1">
                             <div class="slider-container position-relative">
@@ -118,14 +107,14 @@
                                 <input type="range" class="form-range slider-thumb max-thumb" min="1400" max="8000"
                                     value="<%= typeof selectedMaxPrice !== 'undefined' && selectedMaxPrice ? selectedMaxPrice : '8000' %>">
                             </div>
-                        
+
                             <div class="slider-labels d-flex justify-content-between mt-2">
                                 <small class="text-muted">₹1400</small>
                                 <small class="text-muted">₹4700</small>
                                 <small class="text-muted">₹8000</small>
                             </div>
                         </div>
-        
+
                         <!-- Price Inputs -->
                         <div class="price-inputs-container row g-3 mb-3">
                             <div class="col-md-5">
@@ -133,32 +122,32 @@
                                     <span class="input-group-text bg-light border-end-0">
                                         <small class="text-muted">Min</small>
                                     </span>
-                                    <input type="number" class="form-control border-start-0 min-price-input" id="minPrice"
-                                        name="minPrice" placeholder="1400"
+                                    <input type="number" class="form-control border-start-0 min-price-input"
+                                        id="minPrice" name="minPrice" placeholder="1400"
                                         value="<%= typeof selectedMinPrice !== 'undefined' ? selectedMinPrice : '' %>"
                                         min="1400" max="8000">
                                     <span class="input-group-text bg-light border-start-0">₹</span>
                                 </div>
                             </div>
-        
+
                             <div class="col-md-2 text-center py-1">
                                 <span class="text-muted">—</span>
                             </div>
-        
+
                             <div class="col-md-5">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text bg-light border-end-0">
                                         <small class="text-muted">Max</small>
                                     </span>
-                                    <input type="number" class="form-control border-start-0 max-price-input" id="maxPrice"
-                                        name="maxPrice" placeholder="8000"
+                                    <input type="number" class="form-control border-start-0 max-price-input"
+                                        id="maxPrice" name="maxPrice" placeholder="8000"
                                         value="<%= typeof selectedMaxPrice !== 'undefined' ? selectedMaxPrice : '' %>"
                                         min="1400" max="8000">
                                     <span class="input-group-text bg-light border-start-0">₹</span>
                                 </div>
                             </div>
                         </div>
-        
+
                         <!-- Action Buttons -->
                         <div class="filter-actions d-flex gap-2">
                             <button type="submit"
@@ -166,7 +155,7 @@
                                 <i class="fas fa-play fa-xs"></i>
                                 <span>Apply Filter</span>
                             </button>
-        
+
                             <% if (typeof selectedMinPrice !=='undefined' && selectedMinPrice || typeof selectedMaxPrice
                                 !=='undefined' && selectedMaxPrice) { %>
                                 <a href="/listings<% if (typeof selectedCategory !== 'undefined' && selectedCategory) { %>?category=<%= selectedCategory %><% } %>"
@@ -177,18 +166,19 @@
                                 <% } %>
                         </div>
             </form>
-        
+
             <!-- Active Filter Display -->
-            <% if (typeof selectedMinPrice !=='undefined' && selectedMinPrice || typeof selectedMaxPrice !=='undefined' &&
-                selectedMaxPrice) { %>
+            <% if (typeof selectedMinPrice !=='undefined' && selectedMinPrice || typeof selectedMaxPrice !=='undefined'
+                && selectedMaxPrice) { %>
                 <div
                     class="active-filter-indicator mt-3 p-2 bg-light rounded d-flex align-items-center justify-content-between">
                     <div>
                         <small class="text-success fw-bold">
                             <i class="fas fa-check-circle me-1"></i>
-                            Active: ₹<%= typeof selectedMinPrice !=='undefined' && selectedMinPrice ? selectedMinPrice : '1400'
-                                %>
-                                - ₹<%= typeof selectedMaxPrice !=='undefined' && selectedMaxPrice ? selectedMaxPrice : '8000' %>
+                            Active: ₹<%= typeof selectedMinPrice !=='undefined' && selectedMinPrice ? selectedMinPrice
+                                : '1400' %>
+                                - ₹<%= typeof selectedMaxPrice !=='undefined' && selectedMaxPrice ? selectedMaxPrice
+                                    : '8000' %>
                         </small>
                     </div>
                     <small class="text-muted">
@@ -197,23 +187,60 @@
                 </div>
                 <% } %>
         </div>
-        </div>
 
-        <div class="tax-toggle" style="width: 20rem;">
-            <div class="form-switch form-check-reverse">
-                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+        <!-- My Listings Filter (Only for Landlords) -->
+        <% if(currUser && currUser.role==='landlord' ) { %>
+            <div class="landlord-filter-container mt-3 mb-3 p-3 bg-white rounded shadow-sm" style="width: 20rem;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0 text-dark fw-bold">
+                        <i class="fas fa-home me-2"></i>My Listings
+                    </h5>
+                    <span class="badge" style="background-color: #fe424d; color: white;">
+                        <%= allListings.filter(listing=> listing.owner && listing.owner._id.equals(currUser._id)).length %>
+                    </span>
+                </div>
+
+                <div class="landlord-actions">
+                    <a href="/listings?myListings=true" class="btn btn-sm w-100 d-flex align-items-center justify-content-center gap-2 mb-2"
+                        style="color: #ffffff; background-color: #fe424d; border-color: #fe424d;">
+                        <i class="fas fa-eye"></i>
+                        <span>View My Listings</span>
+                    </a>
+
+                    <a href="/listings/new"
+                        class="btn btn-primary btn-sm w-100 d-flex align-items-center justify-content-center gap-2">
+                        <i class="fas fa-plus"></i>
+                        <span>Create New Listing</span>
+                    </a>
+                </div>
+
+                <!-- Active My Listings Filter Indicator -->
+                <% if (typeof showMyListings !=='undefined' && showMyListings) { %>
+                    <div class="active-filter-indicator mt-3 p-2 bg-light rounded">
+                        <small class="text-success fw-bold">
+                            <i class="fas fa-check-circle me-1"></i>
+                            Showing only your listings
+                        </small>
+                        <a href="/listings" class="btn-close ms-2" aria-label="Close"></a>
+                    </div>
+                    <% } %>
             </div>
-        </div>
-    
+            <% } %>
+    </div>
 
     <div class="row mt-3 row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
-
         <% for(listing of allListings){ %>
             <a href="/listings/<%= listing._id %>" class="listing-link">
                 <div class="card listing-card" style="width: 20rem;">
                     <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>">
-                    <div class="card-img-overlay">CampusStay
+                    <div class="card-img-overlay">
+                        <!-- Show "Your Listing" badge for landlord's own listings -->
+                        <% if(currUser && currUser.role==='landlord' && listing.owner &&
+                            listing.owner._id.equals(currUser._id)) { %>
+                            <span class="badge bg-success">Your Listing</span>
+                            <% } else { %>
+                                CampusStay
+                                <% } %>
                     </div>
                     <div class="card-body">
                         <p class="card-title"><strong>
@@ -221,13 +248,20 @@
                             </strong></p>
                         <p><strong>Price: </strong>&#x20B9;<%= listing.price %>/month <i class="tax-info"> +&nbsp;18%
                                     GST</i> </p>
+                        <!-- Show owner info for landlord's view -->
+                        <% if(currUser && currUser.role==='landlord' && listing.owner &&
+                            !listing.owner._id.equals(currUser._id)) { %>
+                            <p class="small text-muted mb-0">
+                                <i class="fas fa-user me-1"></i>Owner: <%= listing.owner.username %>
+                            </p>
+                            <% } %>
                     </div>
                 </div>
             </a>
             <% } %>
     </div>
 
-    
+
     <% if (allListings.length===0) { %>
         <div class="alert alert-info mt-4 text-center">
             <h5>No listings found</h5>
@@ -236,97 +270,86 @@
         </div>
         <% } %>
 
-    <script>
-        let taxSwitch = document.getElementById("switchCheckDefault");
-        taxSwitch.addEventListener("click", () => {
-            let taxInfo = document.getElementsByClassName("tax-info");
-            for (info of taxInfo) {
-                if (info.style.display != "inline") {
-                    info.style.display = "inline";
-                } else {
-                    info.style.display = "none";
-                }
-            }
-        })
+            <script>
 
-         document.addEventListener('DOMContentLoaded', function () {
-                const minPriceInput = document.querySelector('.min-price-input');
-                const maxPriceInput = document.querySelector('.max-price-input');
-                const minThumb = document.querySelector('.min-thumb');
-                const maxThumb = document.querySelector('.max-thumb');
-                const progress = document.querySelector('.slider-progress');
+                document.addEventListener('DOMContentLoaded', function () {
+                    const minPriceInput = document.querySelector('.min-price-input');
+                    const maxPriceInput = document.querySelector('.max-price-input');
+                    const minThumb = document.querySelector('.min-thumb');
+                    const maxThumb = document.querySelector('.max-thumb');
+                    const progress = document.querySelector('.slider-progress');
 
-                const minValue = 1400;
-                const maxValue = 8000;
+                    const minValue = 1400;
+                    const maxValue = 8000;
 
-                function updateSlider() {
-                    const minVal = parseInt(minThumb.value);
-                    const maxVal = parseInt(maxThumb.value);
+                    function updateSlider() {
+                        const minVal = parseInt(minThumb.value);
+                        const maxVal = parseInt(maxThumb.value);
 
-                    // Update progress bar
-                    const left = ((minVal - minValue) / (maxValue - minValue)) * 100;
-                    const right = 100 - ((maxVal - minValue) / (maxValue - minValue)) * 100;
-                    progress.style.left = left + '%';
-                    progress.style.right = right + '%';
+                        // Update progress bar
+                        const left = ((minVal - minValue) / (maxValue - minValue)) * 100;
+                        const right = 100 - ((maxVal - minValue) / (maxValue - minValue)) * 100;
+                        progress.style.left = left + '%';
+                        progress.style.right = right + '%';
 
-                    // Update input fields
-                    minPriceInput.value = minVal;
-                    maxPriceInput.value = maxVal;
-                }
-
-                // Initialize slider
-                updateSlider();
-
-                // Event listeners for slider thumbs
-                minThumb.addEventListener('input', function () {
-                    let value = parseInt(this.value);
-                    if (value > parseInt(maxThumb.value)) {
-                        value = parseInt(maxThumb.value);
-                        this.value = value;
+                        // Update input fields
+                        minPriceInput.value = minVal;
+                        maxPriceInput.value = maxVal;
                     }
+
+                    // Initialize slider
                     updateSlider();
-                });
 
-                maxThumb.addEventListener('input', function () {
-                    let value = parseInt(this.value);
-                    if (value < parseInt(minThumb.value)) {
-                        value = parseInt(minThumb.value);
-                        this.value = value;
-                    }
-                    updateSlider();
-                });
+                    // Event listeners for slider thumbs
+                    minThumb.addEventListener('input', function () {
+                        let value = parseInt(this.value);
+                        if (value > parseInt(maxThumb.value)) {
+                            value = parseInt(maxThumb.value);
+                            this.value = value;
+                        }
+                        updateSlider();
+                    });
 
-                // Event listeners for input fields
-                minPriceInput.addEventListener('input', function () {
-                    let value = parseInt(this.value) || minValue;
-                    if (value > parseInt(maxPriceInput.value)) {
-                        value = parseInt(maxPriceInput.value);
-                        this.value = value;
-                    }
-                    minThumb.value = value;
-                    updateSlider();
-                });
+                    maxThumb.addEventListener('input', function () {
+                        let value = parseInt(this.value);
+                        if (value < parseInt(minThumb.value)) {
+                            value = parseInt(minThumb.value);
+                            this.value = value;
+                        }
+                        updateSlider();
+                    });
 
-                maxPriceInput.addEventListener('input', function () {
-                    let value = parseInt(this.value) || maxValue;
-                    if (value < parseInt(minPriceInput.value)) {
-                        value = parseInt(minPriceInput.value);
-                        this.value = value;
-                    }
-                    maxThumb.value = value;
-                    updateSlider();
-                });
+                    // Event listeners for input fields
+                    minPriceInput.addEventListener('input', function () {
+                        let value = parseInt(this.value) || minValue;
+                        if (value > parseInt(maxPriceInput.value)) {
+                            value = parseInt(maxPriceInput.value);
+                            this.value = value;
+                        }
+                        minThumb.value = value;
+                        updateSlider();
+                    });
 
-                // Form validation
-                document.querySelector('.price-filter-form').addEventListener('submit', function (e) {
-                    const minVal = parseInt(minPriceInput.value);
-                    const maxVal = parseInt(maxPriceInput.value);
+                    maxPriceInput.addEventListener('input', function () {
+                        let value = parseInt(this.value) || maxValue;
+                        if (value < parseInt(minPriceInput.value)) {
+                            value = parseInt(minPriceInput.value);
+                            this.value = value;
+                        }
+                        maxThumb.value = value;
+                        updateSlider();
+                    });
 
-                    if (minVal > maxVal) {
-                        e.preventDefault();
-                        alert('Minimum price cannot be greater than maximum price');
-                        return false;
-                    }
+                    // Form validation
+                    document.querySelector('.price-filter-form').addEventListener('submit', function (e) {
+                        const minVal = parseInt(minPriceInput.value);
+                        const maxVal = parseInt(maxPriceInput.value);
+
+                        if (minVal > maxVal) {
+                            e.preventDefault();
+                            alert('Minimum price cannot be greater than maximum price');
+                            return false;
+                        }
+                    });
                 });
-            });
-    </script>
+            </script>
