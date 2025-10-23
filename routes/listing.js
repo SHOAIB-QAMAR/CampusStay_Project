@@ -18,6 +18,23 @@ const multiUpload = upload.fields([
     { name: 'listing[menuImage]', maxCount: 1 }
 ]);
 
+const checkLoggedInAndRedirect = (req, res, next) => {
+    // If user is logged in, continue to show the listing
+    if (req.isAuthenticated()) {
+        return next();
+    }
+
+    // If user is NOT logged in:
+    // 1. Save the original URL to redirect back after login
+    req.session.originalUrl = req.originalUrl;
+
+    // 2. Flash the message
+    req.flash("error", "You need to log in to view listing details!");
+
+    // 3. Redirect to login
+    res.redirect("/login");
+};
+
 router.route("/")
     .get(wrapAsync(listingController.index))
     .post(isLoggedIn, multiUpload, validateListing, wrapAsync(listingController.createListing));
@@ -26,8 +43,14 @@ router.get("/search", wrapAsync(listingController.searchListings));
 
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
+// router.route("/:id")
+//     .get(wrapAsync(listingController.showListing))
+//     .put(isLoggedIn, isOwner, multiUpload, validateListing, wrapAsync(listingController.updateListing))
+//     .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
+
 router.route("/:id")
-    .get(wrapAsync(listingController.showListing))
+    // Replace wrapAsync(listingController.showListing) with the new middleware chain
+    .get(checkLoggedInAndRedirect, wrapAsync(listingController.showListing))
     .put(isLoggedIn, isOwner, multiUpload, validateListing, wrapAsync(listingController.updateListing))
     .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
 
