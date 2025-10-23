@@ -12,44 +12,55 @@ router.route("/signup")
     .get(userController.renderSignupForm)
     .post(wrapAsync(userController.signup));
 
+router.get("/become-host",
+    saveRedirectUrl,
+    (req, res, next) => {
+        if (!req.isAuthenticated()) {
+            req.flash("error", "You must be logged in to become a host!");
+            return res.redirect("/login");
+        }
+        next();
+    },
+    wrapAsync(userController.becomeHost)
+);
+
 router.route("/login")
     .get(userController.renderLoginForm)
     .post(
         saveRedirectUrl,
-        passport.authenticate("local", {
-            failureRedirect: "/login",
-            failureFlash: true
-        }),
-        async (req, res) => {
-            const { role } = req.body; // Get role from form data
-            const user = req.user; // Now user is available after authentication
-
-            console.log("Selected role:", role);
-            console.log("User role:", user.role);
-
-            // Check if role matches
-            if (user.role !== role) {
-                req.logout((err) => {
+        // Custom callback to handle user not found
+        (req, res, next) => {
+            passport.authenticate("local", (err, user, info) => {
+                if (err) {
+                    return next(err);
+                }
+                
+                // If user not found, flash register message
+                if (!user) {
+                    req.flash("error", "User not found! Please register first.");
+                    return res.redirect("/signup");
+                }
+                
+                // If user exists, proceed with login
+                req.logIn(user, (err) => {
                     if (err) {
-                        console.error("Logout error:", err);
+                        return next(err);
                     }
-                    req.flash("error", "Role mismatch! Please select the correct role.");
-                    return res.redirect("/login");
+                    
+                    console.log("Login successful. User role:", user.role);
+                    req.flash("success", `Welcome back, ${user.username}!`);
+                    
+                    let redirectUrl = res.locals.redirectUrl || "/listings"; 
+                    if (user.role === "admin") {
+                        redirectUrl = "/admin/dashboard";
+                    }
+                    
+                    return res.redirect(redirectUrl);
                 });
-                return;
-            }
-
-            req.flash("success", `Welcome back, ${user.username}!`);
-
-            // Redirect based on role
-            if (user.role === "admin") {
-                return res.redirect("/admin/dashboard");
-            } else {
-                const redirectUrl = res.locals.redirectUrl || "/listings";
-                return res.redirect(redirectUrl);
-            }
+                
+            })(req, res, next);
         }
-);
+    );
     
 router.get("/logout", userController.logout);
 
