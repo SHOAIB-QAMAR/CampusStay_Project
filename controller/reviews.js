@@ -11,6 +11,7 @@ module.exports.createReview = async (req, res) => {
     const newReview = new Review(req.body.review);
     newReview.author = req.user._id;
 
+    // ✅ Important: link the review to its listing
     newReview.listing = listing._id;
 
     listing.reviews.push(newReview);
